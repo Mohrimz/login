@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login/screens/cart_screen.dart';
-//global state
-final List<Map<String, dynamic>> cart = []; 
+
+// Global state
+final List<Map<String, dynamic>> cart = [];
 
 class ProductDetailScreen extends StatefulWidget {
   final String imagePath;
@@ -29,23 +30,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     super.initState();
-    isInCart = cart.any((item) => item['name'] == widget.productName); 
+    isInCart = cart.any((item) => item['name'] == widget.productName);
   }
 
   void toggleCart() {
     setState(() {
       if (isInCart) {
-        cart.removeWhere((item) => item['name'] == widget.productName); 
+        cart.removeWhere((item) => item['name'] == widget.productName);
       } else {
         cart.add({
           'name': widget.productName,
           'price': widget.price,
           'imagePath': widget.imagePath,
           'category': widget.category,
-          'quantity': 1, 
-        }); 
+          'quantity': 1,
+        });
       }
-      isInCart = !isInCart; 
+      isInCart = !isInCart;
     });
   }
 
@@ -73,10 +74,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
+            // Use Image.network for remote images
+            Image.network(
               widget.imagePath,
               height: 250,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, progress) {
+                if (progress == null) return child;
+                return const Center(child: CircularProgressIndicator());
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(child: Icon(Icons.error, size: 50));
+              },
             ),
             const SizedBox(height: 16),
             Text(
@@ -84,7 +93,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black, 
+                color: isDarkMode ? Colors.white : Colors.black,
               ),
             ),
             const SizedBox(height: 8),
@@ -104,7 +113,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: isDarkMode ? Colors.white : Colors.black, 
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 Row(
@@ -114,7 +123,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       '${widget.rating}',
                       style: TextStyle(
                         fontSize: 18,
-                        color: isDarkMode ? Colors.white : Colors.black, // Adjust color for dark mode
+                        color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
                   ],
@@ -123,13 +132,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: toggleCart, 
+              onPressed: toggleCart,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isInCart ? Colors.green : Colors.blue, 
+                backgroundColor: isInCart ? Colors.green : Colors.blue,
               ),
               child: Text(
                 isInCart ? 'Remove from Cart' : 'Add to Cart',
-                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), 
+                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
               ),
             ),
           ],

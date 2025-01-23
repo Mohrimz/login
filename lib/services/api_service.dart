@@ -18,5 +18,19 @@ class ApiService {
       throw Exception('Login failed: ${response.body}');
     }
   }
-  
+  // Fetch all products
+  static Future<List<dynamic>> fetchProducts() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/products'), // Replace with your endpoint for fetching products
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['data']; // Assuming the response is in { "data": [...] }
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
 }

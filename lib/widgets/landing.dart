@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login/screens/product_detail_screen.dart'; 
+import 'package:login/screens/product_detail_screen.dart';
 
 class FeaturedProductCard extends StatelessWidget {
   final String imagePath;
@@ -7,8 +7,8 @@ class FeaturedProductCard extends StatelessWidget {
   final String category;
   final String price;
   final double rating;
-  final bool isFavorite; 
-  final Function onFavoriteToggle; 
+  final bool isFavorite;
+  final Function onFavoriteToggle;
 
   const FeaturedProductCard({
     Key? key,
@@ -64,11 +64,18 @@ class FeaturedProductCard extends StatelessWidget {
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                     ),
-                    child: Image.asset(
+                    child: Image.network(
                       imagePath,
                       height: 125,
                       width: double.infinity,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.broken_image,
+                          size: 125,
+                          color: Colors.grey,
+                        );
+                      },
                     ),
                   ),
                   Positioned(
@@ -76,7 +83,7 @@ class FeaturedProductCard extends StatelessWidget {
                     right: 10,
                     child: GestureDetector(
                       onTap: () {
-                        onFavoriteToggle(); 
+                        onFavoriteToggle();
                       },
                       child: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
